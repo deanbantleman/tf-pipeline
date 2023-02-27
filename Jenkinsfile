@@ -9,10 +9,6 @@ def forceHTTPS() {
     sh 'git config --global url."https://".insteadOf ssh://'
 }
 
-body.resolveStrategy = Closure.DELEGATE_FIRST
-body.delegate = config
-body()
-
 config.buildBranch = config.buildBranchOverride == null ? (env.CHANGE_TARGET == null ? env.BRANCH_NAME : env.CHANGE_TARGET) : config.buildBranchOverride
 
 pipeline {
