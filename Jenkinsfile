@@ -23,8 +23,6 @@ pipeline {
     }
     
     environment {
-        AWS_HOME = tool 'aws'
-        TF_HOME = tool 'terraform'
         GIT_TOKEN = credentials('github')
         GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
@@ -86,7 +84,7 @@ pipeline {
 
             steps {
                 script {
-                    sh "${env.TF_HOME}/terraform init -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate"
+                    sh "terraform/terraform init -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate"
                 }
             }
         }
@@ -110,11 +108,11 @@ pipeline {
                     def pr_comment = ''
 
                     // Generate Terraform plan
-                    sh "${env.TF_HOME}/terraform plan -var-file terraform.tfvars -out plan.out"
+                    sh "terraform/terraform plan -var-file terraform.tfvars -out plan.out"
 
                     // Export plan as JSON
                     def tf_plan_text = sh (
-                        script: "${env.TF_HOME}/terraform show -json plan.out",
+                        script: "terraform/terraform show -json plan.out",
                         returnStdout: true
                     ).trim()
                     def tf_plan = readJSON text: tf_plan_text
@@ -125,7 +123,7 @@ pipeline {
                     // Determine whether the plan needs to be applied
                     if (TRIGGER == 'COMMENT_OK') {
                         // Copy hash from S3
-                        sh "${env.AWS_HOME}/aws s3 cp s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash plan.hash"
+                        sh "aws s3 cp s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash plan.hash"
 
                         // Read hash
                         def old_plan_hash = readFile file: 'plan.hash'
@@ -140,7 +138,7 @@ pipeline {
 
                     // Copy hash to S3
                     writeFile file: "plan.hash", text: plan_hash
-                    sh "${env.AWS_HOME}/aws s3 cp plan.hash s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
+                    sh "aws s3 cp plan.hash s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
 
                     tf_plan.resource_changes.each { change ->
                         if (change.change.actions.contains('update')) {
@@ -243,7 +241,7 @@ pipeline {
                     }
 
                     // Apply the changes
-                    sh "${env.TF_HOME}/terraform apply plan.out"
+                    sh "terraform/terraform apply plan.out"
 
                     // Merge the PR
                     def mergeMethod = config.buildBranchOverride != null || env.CHANGE_TARGET == 'dev' ? 'squash' : 'merge'
@@ -251,7 +249,7 @@ pipeline {
                     pullRequest.merge(commitTitle: "${pullRequest.title} (#${env.CHANGE_ID})", commitMessage: pullRequest.body, mergeMethod: mergeMethod)
 
                     // Delete the hash from S3
-                    sh "${env.AWS_HOME}/aws s3 rm s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
+                    sh "aws s3 rm s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
 
                     // Delete the feature branch
                     if (! ['dev', 'nonprod', 'preprod', 'master'].contains(env.CHANGE_BRANCH)) {
