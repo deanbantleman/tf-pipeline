@@ -32,7 +32,6 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
-        withAWS(region: 'eu-west-2')
     }
 
     stages {
