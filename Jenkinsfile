@@ -29,7 +29,7 @@ pipeline {
         GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
         DIRTY_PLAN = 'false'
-        TF_STATE_BUCKET = 'DEFINE-BUCKET'
+        TF_STATE_BUCKET = 'db-tsbpoc-terraform-state'
     }
 
     options {
@@ -41,10 +41,7 @@ pipeline {
         stage('Determine what caused the build') {
             when {
                 anyOf {
-                    changeRequest target: 'dev'
-                    changeRequest target: 'nonprod'
-                    changeRequest target: 'preprod'
-                    changeRequest target: 'master'
+                    changeRequest target: 'main'
                 }
             }
 
@@ -69,10 +66,7 @@ pipeline {
         stage('Create credential helper script') {
             when {
                 anyOf {
-                    changeRequest target: 'dev'
-                    changeRequest target: 'nonprod'
-                    changeRequest target: 'preprod'
-                    changeRequest target: 'master'
+                    changeRequest target: 'main'
                 }
             }
 
@@ -86,10 +80,7 @@ pipeline {
         stage('Terraform: Init') {
             when {
                 anyOf {
-                    changeRequest target: 'dev'
-                    changeRequest target: 'nonprod'
-                    changeRequest target: 'preprod'
-                    changeRequest target: 'master'
+                    changeRequest target: 'main'
                 }
             }
 
@@ -103,10 +94,7 @@ pipeline {
         stage('Terraform: Plan') {
             when {
                 anyOf {
-                    changeRequest target: 'dev'
-                    changeRequest target: 'nonprod'
-                    changeRequest target: 'preprod'
-                    changeRequest target: 'master'
+                    changeRequest target: 'main'
                 }
             }
 
@@ -214,10 +202,7 @@ pipeline {
                     equals expected: 'COMMENT_OK', actual: TRIGGER
                     equals expected: 'false', actual: DIRTY_PLAN
                     anyOf {
-                        changeRequest target: 'dev'
-                        changeRequest target: 'nonprod'
-                        changeRequest target: 'preprod'
-                        changeRequest target: 'master'
+                        changeRequest target: 'main'
                     }
                 }
             }
