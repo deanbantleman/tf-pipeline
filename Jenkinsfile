@@ -79,7 +79,9 @@ pipeline {
 
             steps {
                 script {
-                    sh "terraform/terraform init -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate"
+                    dir ('<your new directory>') { 
+                        sh "terraform/terraform init -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate"
+                    }
                 }
             }
         }
