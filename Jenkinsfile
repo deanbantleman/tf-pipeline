@@ -105,13 +105,17 @@ pipeline {
                     def pr_comment = ''
 
                     // Generate Terraform plan
-                    sh "terraform/terraform plan -var-file terraform.tfvars -out plan.out"
+                    dir ('terraform') { 
+                        sh "terraform plan -var-file terraform.tfvars -out plan.out"
+                    }
 
                     // Export plan as JSON
-                    def tf_plan_text = sh (
-                        script: "terraform/terraform show -json plan.out",
-                        returnStdout: true
-                    ).trim()
+                    dir ('terraform') { 
+                        def tf_plan_text = sh (
+                            script: "terraform/terraform show -json plan.out",
+                            returnStdout: true
+                        ).trim()
+                    }
                     def tf_plan = readJSON text: tf_plan_text
 
                     // Hash plan
