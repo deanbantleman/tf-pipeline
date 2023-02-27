@@ -2,11 +2,6 @@
 
 def config = [:]
 
-def createCredentialHelper() {
-    writeFile file: '/tmp/git-askpass.sh', text: 'echo $GIT_TOKEN'
-    sh 'chmod +x /tmp/git-askpass.sh'
-}
-
 def forceHTTPS() {
     sh 'git config --global url."https://github.com/".insteadOf git@github.com:'
     sh 'git config --global url."https://github.com/".insteadOf ssh://git@github.com/'
@@ -82,9 +77,7 @@ pipeline {
 
             steps {
                 script {
-                    def gitHelper = new tsb.uk.aws.jenkins.Git()
-                    gitHelper.createCredentialHelper()
-                    gitHelper.forceHTTPS()
+                    forceHTTPS()
                 }
             }
         }
