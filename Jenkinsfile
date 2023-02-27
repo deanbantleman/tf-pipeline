@@ -19,7 +19,7 @@ pipeline {
     }
     
     environment {
-        GIT_TOKEN = credentials('github')
+ //       GIT_TOKEN = credentials('github')
         GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
         DIRTY_PLAN = 'false'
