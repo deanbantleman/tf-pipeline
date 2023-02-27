@@ -2,6 +2,18 @@
 
 def config = [:]
 
+def createCredentialHelper() {
+    writeFile file: '/tmp/git-askpass.sh', text: 'echo $GIT_TOKEN'
+    sh 'chmod +x /tmp/git-askpass.sh'
+}
+
+def forceHTTPS() {
+    sh 'git config --global url."https://github.com/".insteadOf git@github.com:'
+    sh 'git config --global url."https://github.com/".insteadOf ssh://git@github.com/'
+    sh 'git config --global url."https://".insteadOf git://'
+    sh 'git config --global url."https://".insteadOf ssh://'
+}
+
 body.resolveStrategy = Closure.DELEGATE_FIRST
 body.delegate = config
 body()
