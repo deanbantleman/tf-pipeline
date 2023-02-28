@@ -20,6 +20,7 @@ pipeline {
     
     environment {
  //       GIT_TOKEN = credentials('github')
+        TF_IN_AUTOMATION = 'true'
         GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
         DIRTY_PLAN = 'false'
