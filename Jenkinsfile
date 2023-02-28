@@ -124,10 +124,14 @@ pipeline {
                     // Determine whether the plan needs to be applied
                     if (TRIGGER == 'COMMENT_OK') {
                         // Copy hash from S3
-                        sh "aws s3 cp s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash plan.hash"
+                        dir ('terraform') { 
+                            sh "aws s3 cp s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash plan.hash"
+                        }
 
                         // Read hash
-                        def old_plan_hash = readFile file: 'plan.hash'
+                        dir ('terraform') { 
+                            def old_plan_hash = readFile file: 'plan.hash'
+                        }
 
                         // Continue to the next iteration if the hashes match
                         if (plan_hash == old_plan_hash) {
@@ -138,8 +142,10 @@ pipeline {
                     }
 
                     // Copy hash to S3
-                    writeFile file: "plan.hash", text: plan_hash
-                    sh "aws s3 cp plan.hash s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
+                    dir ('terraform') { 
+                        writeFile file: "plan.hash", text: plan_hash
+                        sh "aws s3 cp plan.hash s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
+                    }
 
                     tf_plan.resource_changes.each { change ->
                         if (change.change.actions.contains('update')) {
