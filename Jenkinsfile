@@ -107,7 +107,7 @@ pipeline {
 
                     // Generate Terraform plan
                     dir ('terraform') { 
-                        sh "export TF_LOG='DEBUG' && terraform plan -var-file terraform.tfvars -out plan.out"
+                        sh "export TF_LOG='DEBUG' && terraform plan -var-file terraform.tfvars -out plan.out -no-color"
                     }
 
                     // Export plan as JSON
