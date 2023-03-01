@@ -22,5 +22,6 @@ resource "aws_instance" "example" {
   tags = {
     Name = "example_ec2_instance",
     Terraform = "true"
+    Department = "CloudOffice"
   }
 }
