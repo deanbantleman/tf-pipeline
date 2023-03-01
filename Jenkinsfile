@@ -81,7 +81,7 @@ pipeline {
             steps {
                 script {
                     dir ('terraform') { 
-                        sh "terraform init -plugin-dir=/var/lib/jenkins/.terraform.d/plugins -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate"
+                        sh "terraform init -input=false -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate -no-color"
                     }
                 }
             }
@@ -107,7 +107,7 @@ pipeline {
 
                     // Generate Terraform plan
                     dir ('terraform') { 
-                        sh "export TF_LOG='DEBUG' && terraform plan -var-file terraform.tfvars -out plan.out -no-color"
+                        sh "export TF_LOG='DEBUG' && terraform plan -var-file terraform.tfvars -out plan.out -input=false -no-color"
                     }
 
                     // Export plan as JSON
