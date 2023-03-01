@@ -113,7 +113,7 @@ pipeline {
                     // Export plan as JSON
                     dir ('terraform') { 
                         def tf_plan_text = sh (
-                            script: "terraform/terraform show -json plan.out",
+                            script: "terraform show -json plan.out",
                             returnStdout: true
                         ).trim()
                     }
