@@ -111,12 +111,12 @@ pipeline {
                     }
 
                     // Export plan as JSON
-                    dir ('terraform') { 
-                        def tf_plan_text = sh (
-                            script: "terraform show -json plan.out",
-                            returnStdout: true
-                        ).trim()
-                    }
+                    
+                    def tf_plan_text = sh (
+                        script: "terraform show -json terraform/plan.out",
+                        returnStdout: true
+                    ).trim()
+                    
                     def tf_plan = readJSON text: tf_plan_text
 
                     // Hash plan
