@@ -114,7 +114,7 @@ pipeline {
                     // Export plan as JSON
                     
                     def tf_plan_text = sh (
-                        script: "${env.TF_HOME}/terraform show -json plan.out",
+                        script: "cd terraform && terraform show -json plan.out",
                         returnStdout: true
                     ).trim()
                     
