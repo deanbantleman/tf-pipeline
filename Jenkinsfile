@@ -20,7 +20,7 @@ pipeline {
     
     environment {
  //       GIT_TOKEN = credentials('github')
-        TF_HOME = tool 'terraform'
+        TF_HOME = 'terraform'
         TF_IN_AUTOMATION = 'true'
         GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
