@@ -20,6 +20,7 @@ pipeline {
     
     environment {
  //       GIT_TOKEN = credentials('github')
+        TF_HOME = tool 'terraform'
         TF_IN_AUTOMATION = 'true'
         GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
@@ -113,7 +114,7 @@ pipeline {
                     // Export plan as JSON
                     
                     def tf_plan_text = sh (
-                        script: "terraform show -json 'terraform/plan.out'",
+                        script: "${env.TF_HOME}/terraform show -json 'terraform/plan.out'",
                         returnStdout: true
                     ).trim()
                     
