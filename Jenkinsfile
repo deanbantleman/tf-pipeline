@@ -250,7 +250,9 @@ pipeline {
                     }
 
                     // Apply the changes
-                    sh "terraform/terraform apply plan.out"
+                    dir ('terraform') { 
+                        sh "terraform apply plan.out"
+                    }
 
                     // Merge the PR
                     def mergeMethod = config.buildBranchOverride != null || env.CHANGE_TARGET == 'dev' ? 'squash' : 'merge'
