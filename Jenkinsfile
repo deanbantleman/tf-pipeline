@@ -19,7 +19,7 @@ pipeline {
     }
     
     environment {
- //       GIT_TOKEN = credentials('github')
+    //  GIT_TOKEN = credentials('github')
         TF_HOME = 'terraform'
         TF_IN_AUTOMATION = 'true'
         GIT_ASKPASS = '/tmp/git-askpass.sh'
@@ -131,9 +131,9 @@ pipeline {
                         }
 
                         // Read hash
-                        dir ('terraform') { 
-                            def old_plan_hash = readFile file: 'plan.hash'
-                        }
+                        
+                        def old_plan_hash = readFile file: 'terraform/plan.hash'
+                        
 
                         // Continue to the next iteration if the hashes match
                         if (plan_hash == old_plan_hash) {
