@@ -20,6 +20,8 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
   subnet_id     = "subnet-02e5b7a43cd28220c"
   tags = {
-    Name = "example_ec2_instance"
+    Name = "example_ec2_instance",
+    Terraform = "true"
+    Department = "CloudOffice"
   }
 }
