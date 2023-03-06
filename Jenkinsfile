@@ -22,7 +22,7 @@ pipeline {
         GIT_TOKEN = credentials('gh-token')
         TF_HOME = 'terraform'
         TF_IN_AUTOMATION = 'true'
-        GIT_ASKPASS = '/tmp/git-askpass.sh'
+        // GIT_ASKPASS = '/tmp/git-askpass.sh'
         TRIGGER = 'OTHER'
         DIRTY_PLAN = 'false'
         TF_STATE_BUCKET = 'db-tsbpoc-terraform-state'
@@ -82,7 +82,7 @@ pipeline {
             steps {
                 script {
                     dir ('terraform') { 
-                        sh "terraform init -input=false -backend-config skip_metadata_api_check=true -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate -no-color"
+                        sh "terraform init -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate -no-color"
                     }
                 }
             }
