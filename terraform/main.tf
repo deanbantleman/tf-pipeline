@@ -1,15 +1,3 @@
-terraform {  
-  backend "s3" {    
-    bucket         = "db-tsbpoc-terraform-state"
-    acl            = "private"
-    encrypt        = true
-    key            = "terraform.tfstate"
-    dynamodb_table = "db-tsb-jenkins-poc-locks"
-    region         = "eu-west-2"  
-  }
-}
-
-
 data "aws_ami" "ubuntu" {
   most_recent = true
 
