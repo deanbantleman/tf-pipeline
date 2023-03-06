@@ -82,7 +82,7 @@ pipeline {
             steps {
                 script {
                     dir ('terraform') { 
-                        sh "terraform init -backend-config encrypt=true -backend-config region=eu-west-2 -backend-config bucket=${env.TF_STATE_BUCKET} -backend-config key=terraform.tfstate -no-color"
+                        sh "terraform init -no-color -input=false -backend=true -backend-config='bucket=db-tsbpoc-terraform-state' -backend-config='region=eu-west-2' -backend-config='key=terraform.tfstate' -backend-config='encrypt=true' -backend-config='dynamodb_table=db-tsb-jenkins-poc-locks' -lock='true'"
                     }
                 }
             }
