@@ -1,3 +1,7 @@
+terraform {
+  backend "s3" {}
+}
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
