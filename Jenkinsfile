@@ -263,9 +263,9 @@ pipeline {
                     sh "aws s3 rm s3://${env.TF_STATE_BUCKET}/${env.CHANGE_ID}.hash"
 
                     // Delete the feature branch
-                    if (! ['dev', 'nonprod', 'preprod', 'master'].contains(env.CHANGE_BRANCH)) {
-                        sh "git push -d origin ${env.CHANGE_BRANCH}"
-                    }
+                    // if (! ['dev', 'nonprod', 'preprod', 'master'].contains(env.CHANGE_BRANCH)) {
+                    //     sh "git push -d origin ${env.CHANGE_BRANCH}"
+                    // }
                 }
             }
         }
