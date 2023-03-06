@@ -36,3 +36,14 @@ resource "aws_instance" "demo" {
     Department = "CloudOffice"
   }
 }
+
+resource "aws_instance" "test" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  subnet_id     = "subnet-02e5b7a43cd28220c"
+  tags = {
+    Name = "test_instance_tsb",
+    Terraform = "true"
+    Department = "CloudOffice"
+  }
+}
